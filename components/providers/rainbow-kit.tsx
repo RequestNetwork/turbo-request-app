@@ -4,11 +4,10 @@ import { ReactNode } from 'react'
 
 import { RainbowKitProvider, darkTheme, lightTheme } from '@rainbow-me/rainbowkit'
 import { connectorsForWallets } from '@rainbow-me/rainbowkit'
-import { coinbaseWallet, injectedWallet, metaMaskWallet, rainbowWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
+import { braveWallet, injectedWallet, ledgerWallet, metaMaskWallet } from '@rainbow-me/rainbowkit/wallets'
 import { WagmiConfig, createClient } from 'wagmi'
 
 import { chains, provider } from '@/config/networks'
-import { siteConfig } from '@/config/site'
 import { useColorMode } from '@/lib/state/color-mode'
 
 interface Props {
@@ -20,11 +19,9 @@ const connectors = connectorsForWallets([
   {
     groupName: 'Recommended',
     wallets: [
-      injectedWallet({ chains }),
-      metaMaskWallet({ chains }),
-      rainbowWallet({ chains }),
-      coinbaseWallet({ chains, appName: siteConfig.name }),
-      walletConnectWallet({ chains }),
+      metaMaskWallet({ chains }), // eth_decrypt supported but deprecated: https://github.com/MetaMask/metamask-extension/issues/15379
+      braveWallet({ chains }), // eth_decrypt supported but deprecated: https://github.com/brave/brave-wallet-docs/pull/73
+      ledgerWallet({ chains }) // eth_decrypt supported but blocked by Metamask keyring: https://github.com/MetaMask/metamask-extension/pull/16716
     ],
   },
 ])
