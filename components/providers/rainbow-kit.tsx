@@ -21,7 +21,7 @@ const connectors = connectorsForWallets([
     wallets: [
       metaMaskWallet({ chains }), // EIP-1024 supported but deprecated: https://github.com/MetaMask/metamask-extension/issues/15379
       braveWallet({ chains }), // EIP-1024 supported but deprecated: https://github.com/brave/brave-wallet-docs/pull/73
-      ledgerWallet({ chains }), // EIP-1024 supported but blocked by Metamask keyring: https://github.com/MetaMask/metamask-extension/pull/16716
+      ledgerWallet({ chains }), // EIP-1024 supported but blocked by Metamask keyring: https://github.com/LedgerHQ/app-ethereum/issues/189, https://github.com/MetaMask/metamask-extension/pull/16716
     ],
   },
 ])
