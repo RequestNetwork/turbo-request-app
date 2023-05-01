@@ -1,6 +1,8 @@
 import { CurrencyDefinition } from '@requestnetwork/currency'
 import classNames from 'clsx'
 
+import { Tooltip } from '@/components/ui/tooltip'
+
 interface AmountProps {
   className?: string
   amount: number
@@ -20,11 +22,13 @@ export const Amount = ({ className, amount, currency, role, styled }: AmountProp
   })
   const classes = classNames('Address', { styled }, className)
   return (
-    <div color={role === 'payee' ? '#008556' : role === 'payer' ? '#DE1C22' : ''}>
-      <h5>
-        {role === 'payer' ? <>-</> : <>+</>}&nbsp;
-        {displayAmount} {currency.symbol}
-      </h5>
-    </div>
+    <Tooltip title={titleAmount !== displayAmount ? `${amount} ${currency.symbol}` : ''}>
+      <div className={classes} color={role === 'payee' ? '#008556' : role === 'payer' ? '#DE1C22' : ''}>
+        <h5>
+          {role === 'payer' ? <>-</> : <>+</>}&nbsp;
+          {displayAmount} {currency.symbol}
+        </h5>
+      </div>
+    </Tooltip>
   )
 }
