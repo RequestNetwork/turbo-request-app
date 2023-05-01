@@ -1,42 +1,36 @@
 'use client'
 
-import { WalletAddress, WalletBalance, WalletEnsName } from '@turbo-eth/core-wagmi'
-import { motion } from 'framer-motion'
+import { RequestsTable } from '@/integrations/request-network/components/requests-table'
+import { useRnGetRequestsFromIdentity } from '@/integrations/request-network/hooks/use-rn-get-requests-from-identity'
+import { BranchIsAuthenticated } from '@/integrations/siwe/components/branch-is-authenticated'
+import { ButtonSIWELogin } from '@/integrations/siwe/components/button-siwe-login'
+import { useUser } from '@/lib/hooks/use-user'
 
-import { BranchIsWalletConnected } from '@/components/shared/branch-is-wallet-connected'
-import { FADE_DOWN_ANIMATION_VARIANTS } from '@/config/design'
-
-export default function PageDashboard() {
+export default function PageDashboardTransactions() {
   return (
-    <>
-      <motion.div
-        className="flex-center flex h-full w-full"
-        variants={FADE_DOWN_ANIMATION_VARIANTS}
-        initial="hidden"
-        whileInView="show"
-        animate="show"
-        viewport={{ once: true }}>
-        <BranchIsWalletConnected>
-          <div className="flex-center col-span-12 flex flex-col lg:col-span-9">
-            <div className="text-center">
-              <h3 className="font-primary text-2xl font-bold lg:text-6xl">
-                <span className="text-gradient-secondary">
-                  hi 👋 <WalletEnsName />
-                </span>
-              </h3>
-              <span className="font-light">
-                <WalletAddress className="mt-5 block text-xl font-light" />
-                <div className="mt-4">
-                  <span className="font-primary text-3xl font-light">
-                    Balance: <WalletBalance decimals={7} className="" /> ETH
-                  </span>
-                </div>
-              </span>
-            </div>
-          </div>
-          <h3 className="text-lg font-normal">Connect Wallet to view your personalized dashboard.</h3>
-        </BranchIsWalletConnected>
-      </motion.div>
-    </>
+    <section className="p-10">
+      <div className="flex items-center justify-between">
+        <h3 className="text-4xl font-normal">Requests</h3>
+        <BranchIsAuthenticated>
+          <></>
+          <div className="flex items-center gap-x-5 text-center">
+            <span className="text-sm text-gray-600 dark:text-gray-100">Authenticate to access encrypted requests</span>
+            <ButtonSIWELogin className="btn btn-emerald btn-sm" />
+          </div>``
+        </BranchIsAuthenticated>
+      </div>
+      <hr className="my-5 opacity-50" />
+      <BranchIsAuthenticated>
+        <RenderRequestsTable />
+        <></>
+      </BranchIsAuthenticated>
+    </section>
   )
+}
+
+const RenderRequestsTable = () => {
+  const { user } = useUser()
+  const { isLoading, isError, data } = useRnGetRequestsFromIdentity(user.identity?.address)
+  if (isError) return <div className="py-6 text-center">Unauthorized Access</div>
+  return <div>{!isLoading && <RequestsTable data={data?.users} className="w-full flex-1" />}</div>
 }
